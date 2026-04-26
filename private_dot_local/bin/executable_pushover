@@ -1,0 +1,41 @@
+#!/bin/bash
+set -euo pipefail
+IFS=$'\n\t'
+
+if [[ -f "$HOME/.pushover" ]]; then
+  . "$HOME/.pushover"
+fi
+
+URL="${PUSHOVER_URL:-https://api.pushover.net/1/messages.json}"
+
+function require_var {
+        local varname=$1
+
+        if [ -z ${!varname+x} ]; then
+                echo "${varname} not set, exiting."
+                exit 1
+        fi
+}
+
+require_var "PUSHOVER_APP_TOKEN"
+require_var "PUSHOVER_USER_TOKEN"
+
+if [ $# -lt 1 ]; then
+        message=$(cat /dev/stdin)
+else
+        message=$1
+fi
+
+request="{\"token\":\"$PUSHOVER_APP_TOKEN\", \"user\":\"$PUSHOVER_USER_TOKEN\", \"message\":\"$message\"}"
+
+response=$(curl --silent --fail \
+  --header "Content-Type: application/json" \
+  --data "$request" \
+  "$URL")
+retval=$?
+
+if [ $retval ]; then
+        echo 'sent' 1>&2;
+else
+        echo "failed:\n$response" 1>&2;
+fi

@@ -133,7 +133,11 @@ eval "$(mise exec fzf -- fzf --bash)"
 
 eval "$(/usr/bin/mise activate bash)"
 eval "$(mise exec lua@5.1.5 -- luarocks path --bin)"
-eval "$(mise exec lua@5.1.5 -- lua $HOME/.local/install/z.lua --init bash)"
+
+if [[ $(command -v zoxide) ]]; then
+  eval "$(zoxide init bash)"
+fi
+
 
 export EDITOR="nvim"
 
