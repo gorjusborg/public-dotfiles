@@ -23,10 +23,10 @@
 # add the following to "~/.gitconfig" file
 
 [merge]
-  tool = vimdiff
+  tool = nvimdiff
 
 [diff]
-  tool = vimdiff
+  tool = nvimdiff
 
 [mergetool]
   prompt = false
@@ -34,8 +34,8 @@
   keepTemporaries = false
   conflictstyle = diff3
 
-[mergetool "vimdiff"]
-  path = nvim
+[mergetool "nvimdiff"]
+  cmd = nvim -d "$LOCAL" "$MERGED" "$REMOTE" -c '$wincmd w' -c 'wincmd J'
 
 [mergetool "vscode"]
   cmd = code --wait --merge $REMOTE $LOCAL $BASE $MERGED
@@ -47,8 +47,8 @@
   conflictstyle = diff3
 
 
-[difftool "vimdiff"]
-  path = nvim
+[difftool "nvimdiff"]
+  cmd = nvim -d "$LOCAL" "$REMOTE"
 
 [difftool "vscode"]
   cmd = code --wait --diff $LOCAL $REMOTE
